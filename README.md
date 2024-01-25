@@ -91,7 +91,7 @@ The command below downloads the setup and installer scripts from the GitHub repo
 To install and set up the Python development environment, run the following command as your local user (not as root):
 
 ```bash
-$ curl -sL https://raw.githubusercontent.com/mmarmor/msm-ubuntu-asdf-python-devenv-builder/main/msm-ASDF-PythonUbuntuSetupFromGitHub.sh | bash
+$ curl -sL https://raw.githubusercontent.com/mmarmor/MSM-Ubuntu-asdf-Python-Development-Environment-Builder/main/msm-asdf-PythonUbuntuSetup.sh | bash
 ```
 
 #### Method 2: Clone this project to your Unbuntu system and run the scripts manually
@@ -102,8 +102,8 @@ Here are the commands:
 
 ```bash
 $ cd ~
-$ git clone https://github.com/mmarmor/msm-ubuntu-asdf-python-devenv-builder.git
-$ sudo chmod +x msm-ASDF-PythonUbuntuSetupFromGitHub.sh msm-ASDF-LatestPythonInstaller.py
+$ git clone https://github.com/mmarmor/MSM-Ubuntu-asdf-Python-Development-Environment-Builder.git
+$ sudo chmod +x msm-asdf-PythonUbuntuSetup.sh msm-asdf-LatestPythonInstaller.py
 $ source msm-asdf-PythonUbuntuSetup.sh
 ```
 
