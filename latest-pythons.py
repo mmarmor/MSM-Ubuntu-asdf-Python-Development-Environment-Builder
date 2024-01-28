@@ -116,7 +116,7 @@ def get_latest_asdf_versions(output, count=3):
 
     return sorted(selected_versions, reverse=True)
 
-def install_python_versions(count=1):
+def install_python_versions(count=3):
     """
     Installs the latest 'count' minor Python versions using asdf and sets them as global versions.
     The most recent version is listed first. Before installing, it creates and sets up the
@@ -144,4 +144,4 @@ def install_python_versions(count=1):
         print(f"Error listing or installing Python versions: {e}")
 
 if __name__ == "__main__":
-    install_python_versions(count=3)  # Change 'count' to install a different number of versions
+    install_python_versions(count=1)  # Change 'count' to install a different number of versions
