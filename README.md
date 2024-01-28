@@ -34,7 +34,9 @@ This is definitely a script I made for myself, but if you find this helpful, tha
 - A running Ubuntu system (native or via WSL2 or another VM)
 - Internet access for downloading required packages and tools
 
-### WSL2 Cheat Sheet (Optional, but helpful for me)
+### WSL2 Cheat Sheet (Optional)
+
+You don't need WSL2 to use pyqwer, but if you are using WSL2 to host Ubuntu you may find these notes helpful.
 
 I typically use WSL2 on Windows 11 to host my Ubuntu development environment. But this script will work for a native Ubuntu system or one hosted on another VM platform.
 
@@ -44,22 +46,22 @@ Here is my cheat sheet to create my WSL2 environment:
 
 This will install WSL2 and Ubuntu if you have not set up WSL yet in Windows 11:
 ```cmd
-Admin Terminal or PowerShell:\> wsl --install
+(Admin cmd or PowerShell) PS C:\> wsl --install
 ```
 
 To see installed distros:
 ```cmd
-Terminal or PowerShell:\> wsl -l -v
+(cmd or PowerShell) PS C:\> wsl -l -v
 ```
 
 Look at online available distros:
 ```cmd
-Terminal or PowerShell:\> wsl --list --online
+(cmd or PowerShell) PS C:\> wsl --list --online
 ```
 
 Install a distro by name:
 ```cmd
-Terminal or PowerShell:\> wsl --install -d Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-22.04
 ```
 After this runs, you must manually set up a username and password.
 
@@ -67,17 +69,17 @@ After this runs, you must manually set up a username and password.
 
 Shut down *ALL* the WSL distros:
 ```cmd
-Terminal or PowerShell:\> wsl --shutdown
+(cmd or PowerShell) PS C:\> wsl --shutdown
 ```
 
 Terminate Ubuntu on WSL2 (or any specific named distro):
 ```cmd
-Terminal or PowerShell:\> wsl -t Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl -t Ubuntu-22.04
 ```
 
 Remove and **delete** the entire Ubuntu system (you will *lose any work in this instance*):
 ```cmd
-Terminal or PowerShell:\> wsl --unregister Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-22.04
 ```
 
 ### Installation
