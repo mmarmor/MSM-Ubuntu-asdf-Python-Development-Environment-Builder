@@ -40,7 +40,7 @@ You don't need WSL2 to use pyqwer, but if you are using WSL2 to host Ubuntu you 
 
 I typically use WSL2 on Windows 11 to host my Ubuntu development environment. But this script will work for a native Ubuntu system or one hosted on another VM platform.
 
-Here is my cheat sheet to create my WSL2 environment:
+Here is my cheat sheet to create and tear down my WSL2 environment:
 
 #### Setting Up Ubuntu in WSL2:
 
