@@ -159,5 +159,5 @@ log_message "Installing Python tools with pipx..." "$GREEN"
 log_message "Python tools installation completed!" "$GREEN"
 
 log_message "pyqwer setup script completed." "$GREEN"
-#log_message "To apply the changes made by this script to your current shell: source ~/.bashrc" "$GREEN"
-#log_message "Or, for a complete refresh of the shell environment: exec \"$SHELL\"" "$GREEN"
+log_message "To apply the changes made by this script to your current shell: source ~/.bashrc" "$BLUE"
+#log_message "Or, for a complete refresh of the shell environment: exec \"$SHELL\"" "$BLUE"
