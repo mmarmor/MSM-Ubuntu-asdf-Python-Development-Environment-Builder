@@ -42,6 +42,33 @@ I typically use WSL2 on Windows 11 to host my Ubuntu development environment. Bu
 
 Here is my cheat sheet to create and tear down my WSL2 environment:
 
+#### List Existing WSL2 Distributions:
+
+You might want to start by identifying any WSL2 distributions already installed:
+```cmd
+(cmd or PowerShell) PS C:\> wsl --list
+```
+
+On my system I see that I already have an Ubuntu distro installed:
+```
+PS C:\Users\marmo> wsl --list
+Windows Subsystem for Linux Distributions:
+Ubuntu-22.04 (Default)
+PS C:\Users\marmo>
+```
+
+This Ubuntu-22.04 is old and unused, and since I want to start fresh I'll remove it like this: 
+
+Remove and **delete** the entire Ubuntu system (you will *lose any work in this instance*):
+```cmd
+(cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-22.04
+```
+
+I will then install a fresh Ubuntu-22.04 system like this
+```cmd
+(cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-22.04
+```
+
 #### Setting Up Ubuntu in WSL2:
 
 This will install WSL2 and Ubuntu if you have not set up WSL yet in Windows 11:
@@ -97,7 +124,7 @@ The command below downloads the setup and installer scripts from the GitHub repo
 To install and set up the Python development environment, run the following command as your local user (not as root):
 
 ```bash
-$ curl -sL https://raw.githubusercontent.com/mmarmor/MSM-Ubuntu-asdf-Python-Development-Environment-Builder/main/pyqwer.sh | bash
+$ curl -sL https://raw.githubusercontent.com/mmarmor/pyqwer/main/pyqwer-from-github.sh | bash
 ```
 
 #### Method 2: Clone this project to your Unbuntu system and run the scripts manually
@@ -108,7 +135,7 @@ Here are the commands:
 
 ```bash
 $ cd ~
-$ git clone https://github.com/mmarmor/MSM-Ubuntu-asdf-Python-Development-Environment-Builder.git
+$ git clone https://github.com/mmarmor/pyqwer.git
 $ sudo chmod +x pyqwer.sh latest-pythons.py
 $ source pyqwer.sh
 ```
