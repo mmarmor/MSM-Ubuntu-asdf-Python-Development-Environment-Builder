@@ -57,7 +57,7 @@
 log_message() {
     local message=$1
     local color=$2
-    echo -e "${color}${message}\e[0m\n"
+    echo -e "\n${color}${message}\e[0m\n"
 }
 
 # Color codes
@@ -65,6 +65,8 @@ RED='\e[31m'
 GREEN='\e[32m'
 YELLOW='\e[33m'
 BLUE='\e[34m'
+
+BASHRC_PATH="$HOME/.bashrc"
 
 ## General System Updates
 log_message "Starting system update process..." "$GREEN"
@@ -96,15 +98,19 @@ log_message "asdf installation completed!" "$GREEN"
 
 ## Updating bash PATH for asdf
 log_message "Updating .bashrc for asdf..." "$GREEN"
-echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
-echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
+echo '. "$HOME/.asdf/asdf.sh"' >> "$BASHRC_PATH"
+echo '. "$HOME/.asdf/completions/asdf.bash"' >> "$BASHRC_PATH"
 log_message ".bashrc update for asdf completed!" "$GREEN"
+
+# Source .bashrc if it's an interactive shell
+if [[ $- == *i* ]]; then
+    source "$BASHRC_PATH"
+fi
 
 ## Installing Python Versions
 log_message "Running Python script for installing Python versions in a subshell..." "$GREEN"
 (
     source "$HOME/.asdf/asdf.sh"
-    # source ~/.bashrc
     # Use python3 to run the script, as asdf-installed Python versions are not yet available
     python3 latest-pythons.py
 )
@@ -114,30 +120,41 @@ log_message "Python versions installation completed!" "$GREEN"
 log_message "Installing python-launcher using cargo..." "$GREEN"
 cargo install python-launcher
 log_message "Updating .bashrc for python-launcher..." "$GREEN"
-echo 'export PATH="$PATH:$HOME/.cargo/bin"' >> ~/.bashrc
+echo 'export PATH="$PATH:$HOME/.cargo/bin"' >> "$BASHRC_PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
-#source ~/.bashrc
 log_message "Listing available Python versions..." "$GREEN"
 py --list
 
-## Upgrading pip and Installing pipx
-#source ~/.bashrc # Source .bashrc to make the asdf shims available
-log_message "Upgrading pip and installing pipx..." "$GREEN"
-# Now we use 'python' as it refers to the global version set by asdf
-python -m pip install --upgrade pip
-python -m pip install --user pipx
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-export PATH="$HOME/.local/bin:$PATH"
-#source ~/.bashrc
+# Source .bashrc again to include new PATH updates
+if [[ $- == *i* ]]; then
+    source "$BASHRC_PATH"
+fi
 
+## Upgrading pip and Installing pipx
+log_message "Upgrading pip and installing pipx..." "$GREEN"
+# Determine the Python version installed by asdf, fallback to python3 if not set
+PYTHON_BIN_PATH="$HOME/.asdf/installs/python/$(asdf current python | cut -d ' ' -f 1)/bin/python"
+if [ ! -f "$PYTHON_BIN_PATH" ]; then
+    PYTHON_BIN_PATH="python3"
+fi
+
+$PYTHON_BIN_PATH -m pip install --upgrade pip
+$PYTHON_BIN_PATH -m pip install --user pipx
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC_PATH"
+export PATH="$HOME/.local/bin:$PATH"
 log_message "Pip and pipx installation completed!" "$GREEN"
+
+# Source .bashrc once more to update PATH
+if [[ $- == *i* ]]; then
+    source "$BASHRC_PATH"
+fi
 
 ## Installing Global Python Tools with pipx
 log_message "Installing Python tools with pipx..." "$GREEN"
-pipx install build
-pipx install tox
-pipx install pre-commit
-pipx install cookiecutter
+"$HOME/.local/bin/pipx" install build
+"$HOME/.local/bin/pipx" install tox
+"$HOME/.local/bin/pipx" install pre-commit
+"$HOME/.local/bin/pipx" install cookiecutter
 log_message "Python tools installation completed!" "$GREEN"
 
 log_message "pyqwer setup script completed." "$GREEN"
