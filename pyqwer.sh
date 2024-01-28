@@ -115,12 +115,13 @@ log_message "Installing python-launcher using cargo..." "$GREEN"
 cargo install python-launcher
 log_message "Updating .bashrc for python-launcher..." "$GREEN"
 echo 'export PATH="$PATH:$HOME/.cargo/bin"' >> ~/.bashrc
-source ~/.bashrc
+export PATH="$HOME/.cargo/bin:$PATH"
+#source ~/.bashrc
 log_message "Listing available Python versions..." "$GREEN"
 py --list
 
 ## Upgrading pip and Installing pipx
-source ~/.bashrc # Source .bashrc to make the asdf shims available
+#source ~/.bashrc # Source .bashrc to make the asdf shims available
 log_message "Upgrading pip and installing pipx..." "$GREEN"
 # Now we use 'python' as it refers to the global version set by asdf
 python -m pip install --upgrade pip
