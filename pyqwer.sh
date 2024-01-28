@@ -116,17 +116,20 @@ cargo install python-launcher
 log_message "Updating .bashrc for python-launcher..." "$GREEN"
 echo 'export PATH="$PATH:$HOME/.cargo/bin"' >> ~/.bashrc
 export PATH="$HOME/.cargo/bin:$PATH"
-#source ~/.bashrc
+source ~/.bashrc
 log_message "Listing available Python versions..." "$GREEN"
 py --list
 
 ## Upgrading pip and Installing pipx
-#source ~/.bashrc # Source .bashrc to make the asdf shims available
+source ~/.bashrc # Source .bashrc to make the asdf shims available
 log_message "Upgrading pip and installing pipx..." "$GREEN"
 # Now we use 'python' as it refers to the global version set by asdf
 python -m pip install --upgrade pip
 python -m pip install --user pipx
-export PATH="$HOME/.local/bin:$PATH" # Add pipx's installation directory to PATH
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+export PATH="$HOME/.local/bin:$PATH"
+source ~/.bashrc
+
 log_message "Pip and pipx installation completed!" "$GREEN"
 
 ## Installing Global Python Tools with pipx
@@ -137,6 +140,6 @@ pipx install pre-commit
 pipx install cookiecutter
 log_message "Python tools installation completed!" "$GREEN"
 
-log_message "MSM asdf python-launcher environment setup script completed." "$GREEN"
+log_message "pyqwer setup script completed." "$GREEN"
 #log_message "To apply the changes made by this script to your current shell: source ~/.bashrc" "$GREEN"
 #log_message "Or, for a complete refresh of the shell environment: exec \"$SHELL\"" "$GREEN"
