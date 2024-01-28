@@ -1,11 +1,11 @@
 """
-msm-asdf-LatestPythonInstaller.py | MSM 24-Jan-2024
+latest-pythons.py | MSM 24-Jan-2024
 
 Copyright (C) 2024 Michael Marmor | https://michaelmarmor.com/
 You should have received a copy of the GNU General Public License
 along with this program. If not, see https://www.gnu.org/licenses/.
 
-This program was created to be called by msm-asdf-PythonUbuntuSetup.sh
+This program was created to be called by pyqwer.sh
 
 Summary:
 This program automates the process of installing the latest Python

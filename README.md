@@ -19,9 +19,9 @@ This is definitely a script I made for myself, but if you find this helpful, tha
 
 ## Scripts
 
-1. `msm-asdf-PythonUbuntuSetup.sh`: The main script to set up the development environment.
-2. `msm-asdf-LatestPythonInstaller.py`: A Python script that gets called by `msm-asdf-PythonUbuntuSetup.sh` to automate the installation of the latest minor Python versions using asdf.
-3. `msm-asdf-PythonUbuntuSetupFromGitHub.sh`: A script to download and execute the setup and installer scripts directly from GitHub. This is the recommended way of running the scripts.
+1. `pyqwer.sh`: The main script to set up the development environment.
+2. `latest-pythons.py`: A Python script that gets called by `pyqwer.sh` to automate the installation of the latest minor Python versions using asdf.
+3. `pyqwer-from-github.sh`: A script to download and execute the setup and installer scripts directly from GitHub. This is the recommended way of running the scripts.
 
 ## Getting Started
 
@@ -91,7 +91,7 @@ The command below downloads the setup and installer scripts from the GitHub repo
 To install and set up the Python development environment, run the following command as your local user (not as root):
 
 ```bash
-$ curl -sL https://raw.githubusercontent.com/mmarmor/MSM-Ubuntu-asdf-Python-Development-Environment-Builder/main/msm-asdf-PythonUbuntuSetup.sh | bash
+$ curl -sL https://raw.githubusercontent.com/mmarmor/MSM-Ubuntu-asdf-Python-Development-Environment-Builder/main/pyqwer.sh | bash
 ```
 
 #### Method 2: Clone this project to your Unbuntu system and run the scripts manually
@@ -103,13 +103,13 @@ Here are the commands:
 ```bash
 $ cd ~
 $ git clone https://github.com/mmarmor/MSM-Ubuntu-asdf-Python-Development-Environment-Builder.git
-$ sudo chmod +x msm-asdf-PythonUbuntuSetup.sh msm-asdf-LatestPythonInstaller.py
-$ source msm-asdf-PythonUbuntuSetup.sh
+$ sudo chmod +x pyqwer.sh latest-pythons.py
+$ source pyqwer.sh
 ```
 
 ## Customization
 
-This script installs the three most recent minor versions of Python (for example, 3.12.X, 3.11.X, 3.10.X) and sets the most recent (3.12.X in the example) as the global default. You can customize the number of Python versions to install by modifying the `count` parameter in the `install_python_versions` function call inside `msm-ASDF-LatestPythonInstaller.py`.
+This script installs the three most recent minor versions of Python (for example, 3.12.X, 3.11.X, 3.10.X) and sets the most recent (3.12.X in the example) as the global default. You can customize the number of Python versions to install by modifying the `count` parameter in the `install_python_versions` function call inside `latest-pythons.py`.
 
 ## License
 

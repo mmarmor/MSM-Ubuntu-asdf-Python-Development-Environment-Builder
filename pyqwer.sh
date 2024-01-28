@@ -4,7 +4,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see https://www.gnu.org/licenses/.
 #
-# msm-asdf-PythonUbuntuSetup.sh | MSM 24-Jan-2024
+# pyqwer.sh | MSM 24-Jan-2024
 
 # Summary:
 #
@@ -25,7 +25,7 @@
 #
 # Run this script to automatically update the system, install asdf,
 # python-launcher, and set up a Python development environment. 
-# Ensure 'msm-asdf-LatestPythonInstaller.py' is available and executable
+# Ensure 'latest-pythons.py' is available and executable
 # in the same directory as this script.
 #
 #---------------------------------------------------------------------------------
@@ -37,18 +37,18 @@
 #
 # Use File Explorer to copy these two files into /home/marmor/ via the Ubuntu mount point
 #
-# msm-asdf-PythonUbuntuSetup.sh
-# msm-asdf-LatestPythonInstaller.py
+# pyqwer.sh
+# latest-pythons.py
 #
-# marmor@MANTIS:~$ sudo chmod +x msm-asdf-PythonUbuntuSetup.sh msm-asdf-LatestPythonInstaller.py
+# marmor@MANTIS:~$ sudo chmod +x pyqwer.sh latest-pythons.py
 #
 # You must "source" the script instead of running it:
 #
-# source msm-asdf-PythonUbuntuSetup.sh
+# source pyqwer.sh
 # # or
-# . msm-asdf-PythonUbuntuSetup.sh
+# . pyqwer.sh
 #
-# marmor@MANTIS:~$ source msm-asdf-PythonUbuntuSetup.sh
+# marmor@MANTIS:~$ source pyqwer.sh
 #
 # That should build the entire dev environment
 #---------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ log_message "Running Python script for installing Python versions in a subshell.
 (
     source ~/.bashrc
     # Use python3 to run the script, as asdf-installed Python versions are not yet available
-    python3 msm-asdf-LatestPythonInstaller.py
+    python3 latest-pythons.py
 )
 log_message "Python versions installation completed!" "$GREEN"
 

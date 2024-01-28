@@ -4,8 +4,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see https://www.gnu.org/licenses/.
 #
-# msm-ASDF-PythonUbuntuSetupFromGitHub.sh | MSM 24-Jan-2024
-
+# pyqwer-from-github.sh | MSM 24-Jan-2024
 
 # To use this script:
 # curl -sL https://raw.githubusercontent.com/mmarmor/msm-UbuntuPythonDevEnvBuilder/main/msm-PythonDevEnvSetupFromGitHub.sh | bash
@@ -14,8 +13,8 @@
 REPO_URL="https://raw.githubusercontent.com/mmarmor/msm-UbuntuPythonDevEnvBuilder/main"
 
 # Define the filenames
-SETUP_SCRIPT="msm-asdf-PythonUbuntuSetup.sh"
-INSTALLER_SCRIPT="msm-asdf-LatestPythonInstaller.py"
+SETUP_SCRIPT="pyqwer.sh"
+INSTALLER_SCRIPT="latest-pythons.py"
 
 # Download the scripts
 echo "Downloading $SETUP_SCRIPT..."
