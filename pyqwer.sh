@@ -103,7 +103,8 @@ log_message ".bashrc update for asdf completed!" "$GREEN"
 ## Installing Python Versions
 log_message "Running Python script for installing Python versions in a subshell..." "$GREEN"
 (
-    source ~/.bashrc
+    source "$HOME/.asdf/asdf.sh"
+    # source ~/.bashrc
     # Use python3 to run the script, as asdf-installed Python versions are not yet available
     python3 latest-pythons.py
 )
