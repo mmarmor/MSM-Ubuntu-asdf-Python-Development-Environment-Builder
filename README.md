@@ -1,10 +1,14 @@
-# MSM Ubuntu-asdf-Python Development Environment Builder
+# pyqwer 
+
+*Quickly configure a newly installed Ubuntu environment for Python development using asdf-python and an opinionated set of tools.*
+
+----
 
 This project provides a set of scripts for setting up a comprehensive command-line-driven Python development environment on Ubuntu, including tools I frequently use, like `asdf`, `python-launcher`, `pipx`, `build`, `tox`, `pre-commit`, and `cookiecutter`.
 
 In addition to updating Ubuntu and installing dependencies and tools, it automatically installs the three latest minor versions of Python using [asdf](https://asdf-vm.com/) (via the [asdf-python](https://github.com/asdf-community/asdf-python) plugin, which uses [pyenv](https://github.com/pyenv/pyenv)) for development and testing.
 
-I made this to speed up my tinkering and experiments and to ensure that even for trivial projects, I always start with a base foundation that can easily support and encourage proper multi-version testing and distribution packaging. Distribution packaging is often overlooked when starting a new project, and baking it in from the start saves energy and make everyone look smart in the future.
+I made this to speed up my tinkering and experiments and to ensure that even for trivial projects, I always start with a base foundation that can easily support and encourage proper multi-version testing and distribution packaging. In the past, I always overlooked distribution packaging when starting a new project. I now realize how important it is, not just for sharing code, but to help enforce cohesion and encapsulation and to create a mindset that creates opportunities for composition.
 
 This is definitely a script I made for myself, but if you find this helpful, that's great, too!
 
