@@ -7,10 +7,10 @@
 # pyqwer-from-github.sh | MSM 24-Jan-2024
 
 # To use this script:
-# curl -sL https://raw.githubusercontent.com/mmarmor/msm-UbuntuPythonDevEnvBuilder/main/msm-PythonDevEnvSetupFromGitHub.sh | bash
+# curl -sL https://raw.githubusercontent.com/mmarmor/pyqwer/main/pyqwer-from-github.sh | bash
 
 # Define the GitHub repository and branch
-REPO_URL="https://raw.githubusercontent.com/mmarmor/msm-UbuntuPythonDevEnvBuilder/main"
+REPO_URL="https://raw.githubusercontent.com/mmarmor/pyqwer/main"
 
 # Define the filenames
 SETUP_SCRIPT="pyqwer.sh"
@@ -27,5 +27,5 @@ curl -sLO "$REPO_URL/$INSTALLER_SCRIPT"
 chmod +x "$SETUP_SCRIPT" "$INSTALLER_SCRIPT"
 
 # Run the setup script
-echo "Running MSM asdf + python-launcher Dev Environment setup script..."
+echo "Running pyqwer script..."
 source "./$SETUP_SCRIPT"
