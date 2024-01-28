@@ -144,4 +144,4 @@ def install_python_versions(count=3):
         print(f"Error listing or installing Python versions: {e}")
 
 if __name__ == "__main__":
-    install_python_versions(count=1)  # Change 'count' to install a different number of versions
+    install_python_versions(count=3)  # Change 'count' to install a different number of versions
