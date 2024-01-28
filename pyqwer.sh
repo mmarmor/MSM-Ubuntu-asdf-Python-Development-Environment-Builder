@@ -82,7 +82,7 @@ sudo apt autoclean
 log_message "System update process completed!" "$GREEN"
 
 ## Installing Dependencies for asdf and Python
-log_message "Installing asdf and Python dependencies..." "$GREEN"
+log_message "Installing dependencies..." "$GREEN"
 sudo apt install -y build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev curl \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev cargo
@@ -94,6 +94,7 @@ log_message "Installing asdf..." "$GREEN"
 # Temporarily set advice.detachedHead to false for this operation
 GIT_CONFIG_NO_DETACHED_ADVICE="git -c advice.detachedHead=false"
 $GIT_CONFIG_NO_DETACHED_ADVICE clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "$ASDF_VERSION"
+. "$HOME/.asdf/asdf.sh"
 log_message "asdf installation completed!" "$GREEN"
 
 ## Updating bash PATH for asdf
