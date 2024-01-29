@@ -76,6 +76,11 @@ This will install WSL2 and Ubuntu if you have not set up WSL yet in Windows 11:
 (Admin cmd or PowerShell) PS C:\> wsl --install
 ```
 
+To update WSL2 itself:
+```cmd
+(cmd or PowerShell) PS C:\> wsl --update
+```
+
 To see installed distros:
 ```cmd
 (cmd or PowerShell) PS C:\> wsl -l -v
