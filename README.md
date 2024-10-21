@@ -1,4 +1,4 @@
-# pyqwer 
+# pyqwer
 
 *Quickly configure a newly installed Ubuntu environment for Python development using asdf-python and an opinionated set of tools.*
 
@@ -19,7 +19,7 @@ This is definitely a script I made for myself, but if you find this helpful, tha
 - **Python Version Management**: Installs multiple Python versions using asdf and sets the global Python version.
 - **Python-Launcher**: Installs [python-launcher](https://python-launcher.app/) via `cargo` for easy Python version switching on Linux.
 - **Development Tools**: Installs essential Python development tools using pipx.
-- **asdf Installation**: Installs asdf (version v0.14.0). Check [asdf-vm.com](https://asdf-vm.com/guide/getting-started.html#_2-download-asdf) for the latest branch version and modify the script as needed to use the latest.
+- **asdf Installation**: Installs asdf (version v0.14.1). Check [asdf-vm.com](https://asdf-vm.com/guide/getting-started.html#_2-download-asdf) for the latest branch version and modify the script as needed to use the latest.
 
 ## Scripts
 
@@ -42,60 +42,68 @@ I typically use WSL2 on Windows 11 to host my Ubuntu development environment. Bu
 
 Here is my cheat sheet to create and tear down my WSL2 environment:
 
-#### List Existing WSL2 Distributions:
+#### List Existing WSL2 Distributions
 
 You might want to start by identifying any WSL2 distributions already installed:
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --list
 ```
 
 On my system I see that I already have an Ubuntu distro installed:
-```
-PS C:\Users\marmo> wsl --list
+
+```PS C:\Users\marmo> wsl --list
 Windows Subsystem for Linux Distributions:
 Ubuntu-22.04 (Default)
 PS C:\Users\marmo>
 ```
 
-This Ubuntu-22.04 is old and unused, and since I want to start fresh I'll remove it like this: 
+This Ubuntu-22.04 is old and unused, and since I want to start fresh I'll remove it like this
 
 Remove and **delete** the entire Ubuntu system (you will *lose any work in this instance*):
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-22.04
 ```
 
 I will then install a fresh Ubuntu-22.04 system like this
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-22.04
 ```
 
-#### Setting Up Ubuntu in WSL2:
+#### Setting Up Ubuntu in WSL2
 
 This will install WSL2 and Ubuntu if you have not set up WSL yet in Windows 11:
+
 ```cmd
 (Admin cmd or PowerShell) PS C:\> wsl --install
 ```
 
 To update WSL2 itself:
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --update
 ```
 
 To see installed distros:
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl -l -v
 ```
 
 Look at online available distros:
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --list --online
 ```
 
 Install a distro by name:
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-22.04
-```
-After this runs, you must manually set up a username and password.
+
+```After this runs, you must manually set up a username and password.
 
 #### Tearing Down Ubuntu in WSL2:
 
@@ -105,11 +113,13 @@ Shut down *ALL* the WSL distros:
 ```
 
 Terminate Ubuntu on WSL2 (or any specific named distro):
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl -t Ubuntu-22.04
 ```
 
 Remove and **delete** the entire Ubuntu system (you will *lose any work in this instance*):
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-22.04
 ```
@@ -129,7 +139,7 @@ The command below downloads the setup and installer scripts from the GitHub repo
 To install and set up the Python development environment, run the following command as your local user (not as root):
 
 ```bash
-$ curl -sL https://raw.githubusercontent.com/mmarmor/pyqwer/main/pyqwer-from-github.sh | bash
+curl -sL https://raw.githubusercontent.com/mmarmor/pyqwer/main/pyqwer-from-github.sh | bash
 ```
 
 #### Method 2: Clone this project to your Unbuntu system and run the scripts manually
@@ -139,10 +149,10 @@ If you don't want to run the code from GitHub, you can also use `git` to clone t
 Here are the commands:
 
 ```bash
-$ cd ~
-$ git clone https://github.com/mmarmor/pyqwer.git
-$ sudo chmod +x pyqwer.sh latest-pythons.py
-$ source pyqwer.sh
+cd ~
+git clone https://github.com/mmarmor/pyqwer.git
+sudo chmod +x pyqwer.sh latest-pythons.py
+source pyqwer.sh
 ```
 
 ## Customization

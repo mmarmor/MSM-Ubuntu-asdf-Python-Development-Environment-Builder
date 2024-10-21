@@ -90,7 +90,7 @@ libffi-dev liblzma-dev cargo tree
 log_message "Dependencies installation completed!" "$GREEN"
 
 ## Installing asdf
-ASDF_VERSION="v0.14.0" # Check https://asdf-vm.com/guide/getting-started.html for the latest version
+ASDF_VERSION="v0.14.1" # Check https://asdf-vm.com/guide/getting-started.html for the latest version
 log_message "Installing asdf..." "$GREEN"
 # Temporarily set advice.detachedHead to false for this operation
 GIT_CONFIG_NO_DETACHED_ADVICE="git -c advice.detachedHead=false"
