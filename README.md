@@ -54,22 +54,22 @@ On my system I see that I already have an Ubuntu distro installed:
 
 ```PS C:\Users\marmo> wsl --list
 Windows Subsystem for Linux Distributions:
-Ubuntu-22.04 (Default)
+Ubuntu-24.04 (Default)
 PS C:\Users\marmo>
 ```
 
-This Ubuntu-22.04 is old and unused, and since I want to start fresh I'll remove it like this
+This Ubuntu-24.04 is old and unused, and since I want to start fresh I'll remove it like this
 
 Remove and **delete** the entire Ubuntu system (you will *lose any work in this instance*):
 
 ```cmd
-(cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-24.04
 ```
 
-I will then install a fresh Ubuntu-22.04 system like this
+I will then install a fresh Ubuntu-24.04 system like this
 
 ```cmd
-(cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-24.04
 ```
 
 #### Setting Up Ubuntu in WSL2
@@ -101,7 +101,7 @@ Look at online available distros:
 Install a distro by name:
 
 ```cmd
-(cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-24.04
 ```
 
 After this runs, you must manually set up a username and password.
@@ -117,13 +117,13 @@ Shut down *ALL* the WSL distros:
 Terminate Ubuntu on WSL2 (or any specific named distro):
 
 ```cmd
-(cmd or PowerShell) PS C:\> wsl -t Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl -t Ubuntu-24.04
 ```
 
 Remove and **delete** the entire Ubuntu system (you will *lose any work in this instance*):
 
 ```cmd
-(cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-22.04
+(cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-24.04
 ```
 
 ### Installation
