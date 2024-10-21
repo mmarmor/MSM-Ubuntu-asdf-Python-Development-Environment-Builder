@@ -102,12 +102,14 @@ Install a distro by name:
 
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-22.04
+```
 
-```After this runs, you must manually set up a username and password.
+After this runs, you must manually set up a username and password.
 
-#### Tearing Down Ubuntu in WSL2:
+#### Tearing Down Ubuntu in WSL2
 
 Shut down *ALL* the WSL distros:
+
 ```cmd
 (cmd or PowerShell) PS C:\> wsl --shutdown
 ```
