@@ -104,7 +104,27 @@ Install a distro by name:
 (cmd or PowerShell) PS C:\> wsl --install -d Ubuntu-24.04
 ```
 
-After this runs, you must manually set up a username and password.
+After this runs, you must manually set up a username and password from the root shell:
+
+Add a new user called marmor:
+
+```bash
+adduser marmor
+```
+
+Add the user to the sudo group:
+
+```bash
+usermod -aG sudo marmor
+```
+
+Change the default user to avoid launching into the root shell:
+
+Exit WSL and run this from your Windows command prompt (CMD or PowerShell):
+
+```PS
+wsl -d Ubuntu-24.04 -u marmor
+```
 
 #### Tearing Down Ubuntu in WSL2
 
