@@ -144,6 +144,12 @@ To install and set up the Python development environment, run the following comm
 curl -sL https://raw.githubusercontent.com/mmarmor/pyqwer/main/pyqwer-from-github.sh | bash
 ```
 
+After the script finishes run `source` to apply the changes made to your environment variables in the current shell session.
+
+```bash
+source ~/.bashrc
+```
+
 #### Method 2: Clone this project to your Unbuntu system and run the scripts manually
 
 If you don't want to run the code from GitHub, you can also use `git` to clone this repository to your home directory. You then make the files executable with `chmod` and `source` the shell script to start the program.
@@ -157,9 +163,41 @@ sudo chmod +x pyqwer.sh latest-pythons.py
 source pyqwer.sh
 ```
 
+After the script finishes run `source` to apply the changes made to your environment variables in the current shell session.
+
+```bash
+source ~/.bashrc
+```
+
+### Verify Installations
+
+Check Python Versions (assuming here that 3.13 is the most recent version):
+
+```bash
+python --version
+python3.13 --version
+python3.12 --version
+python3.11 --version
+```
+
+Verify pipx Tools:
+
+```bash
+pipx list
+```
+
+Test python-launcher:
+
+```bash
+py --version
+py -3.13 --version
+```
+
+You can now proceed with using your newly set up Python development environment.
+
 ## Customization
 
-This script installs the three most recent minor versions of Python (for example, 3.12.X, 3.11.X, 3.10.X) and sets the most recent (3.12.X in the example) as the global default. You can customize the number of Python versions to install by modifying the `count` parameter in the `install_python_versions` function call inside `latest-pythons.py`.
+This script installs the three most recent minor versions of Python (for example, 3.13.X, 3.12.X, 3.11.X) and sets the most recent (3.13.X in the example) as the global default. You can customize the number of Python versions to install by modifying the `count` parameter in the `install_python_versions` function call inside `latest-pythons.py`.
 
 ## License
 
