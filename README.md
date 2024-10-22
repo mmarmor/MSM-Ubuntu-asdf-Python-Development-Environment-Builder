@@ -275,7 +275,7 @@ Open Your WSL Folder in VS Code:
 code .
 ```
 
-This will trigger VS Code on your Windows machine to connect to the Ubuntu WSL instance and automatically install the VS Code Server on your WSL system.
+- This will trigger VS Code on your Windows machine to connect to the Ubuntu WSL instance and automatically install the VS Code Server on your WSL system.
 
 Verify the Setup:
 
