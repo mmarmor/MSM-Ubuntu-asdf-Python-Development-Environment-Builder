@@ -255,7 +255,7 @@ You will not see any output if the command is successful, but you should see a .
 
 Going forward, you’ll be able to use the py command in your project and be sure you’re always getting the copy of Python from your project’s virtual environment unless you explicitly ask for a different (base) Python. This can reduce your cognitive load, because you don’t need to remember to activate or deactivate the virtual environment manually each time you start or stop work on the project.
 
-### VS Code Setup
+### Visual Studio Code WSL Setup
 
 To run Visual Studio Code on your Windows host and use the VS Code Server on your Ubuntu WSL, you don't need to install the full VS Code package on your Ubuntu WSL system. Instead, you can connect to the WSL from your Windows VS Code installation. Here’s how to do it:
 
@@ -263,7 +263,7 @@ Install the WSL Extension for VS Code:
 
 - Open VS Code on your Windows machine.
 - Go to the Extensions view by clicking on the Extensions icon on the sidebar or pressing `Ctrl+Shift+X`.
-- Search for "Remote - WSL" and install the extension. This extension allows you to use VS Code with WSL and will handle installing the VS Code Server on the WSL side.
+- Search for "WSL" and install the Visual Studio Code WSL extension. This extension allows you to use VS Code with WSL and will handle installing the VS Code Server on the WSL side.
 
 Open Your WSL Folder in VS Code:
 
