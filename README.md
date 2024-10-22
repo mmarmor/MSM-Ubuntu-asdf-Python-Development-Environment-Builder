@@ -146,13 +146,13 @@ Remove and **delete** the entire Ubuntu system (you will *lose any work in this 
 (cmd or PowerShell) PS C:\> wsl --unregister Ubuntu-24.04
 ```
 
-### Installation
+## Installation
 
 This script was developed to be run on a fresh install of Ubuntu as a quick start to development.
 
 **Please do not run this on a system that already has things you care about on it!**
 
-#### Method 1 (recommended): Run directly from GitHub
+### Method 1 (recommended): Run directly from GitHub
 
 The recommended way to run the script is directly from GitHub using `curl`. Ubuntu includes `curl` and `bash`, which should already be on your newly installed system.
 
@@ -170,7 +170,7 @@ After the script finishes run `source` to apply the changes made to your environ
 source ~/.bashrc
 ```
 
-#### Method 2: Clone this project to your Unbuntu system and run the scripts manually
+### Method 2: Clone this project to your Unbuntu system and run the scripts manually
 
 If you don't want to run the code from GitHub, you can also use `git` to clone this repository to your home directory. You then make the files executable with `chmod` and `source` the shell script to start the program.
 
@@ -189,9 +189,23 @@ After the script finishes run `source` to apply the changes made to your environ
 source ~/.bashrc
 ```
 
-### Verify Installations
+## Verify Installations
 
-Check Python Versions (assuming here that 3.13 is the most recent version):
+Verify python-launcher and show the installed Python versions:
+
+```bash
+py --list
+```
+
+Default is the highest version. Use flags to launch specific versions of Python:
+
+```bash
+py
+py -3.12
+py -3.11
+ ```
+
+Directly check Python versions (assuming here that 3.13 is the most recent version):
 
 ```bash
 python --version
@@ -213,7 +227,60 @@ py --version
 py -3.13 --version
 ```
 
+## Project Creation
+
 You can now proceed with using your newly set up Python development environment.
+
+```bash
+mkdir code
+cd code/
+mkdir my-python-package
+cd my-python-package/
+asdf list python
+```
+
+Here we go: create the virtual python environment for our project:
+
+```bash
+py -m venv .venv
+```
+
+Or a specific Python version:
+
+```bash
+py -3.11 -m venv .venv
+```
+
+You will not see any output if the command is successful, but you should see a .venv/ directory created. python-launcher on Linux systems will pick up on the presence of this new virtual environment and use it by default whenever you are in this directory or its child directories. The Python launcher for Windows will pick up the virtual environment if that virtual environment is currently active.
+
+Going forward, you’ll be able to use the py command in your project and be sure you’re always getting the copy of Python from your project’s virtual environment unless you explicitly ask for a different (base) Python. This can reduce your cognitive load, because you don’t need to remember to activate or deactivate the virtual environment manually each time you start or stop work on the project.
+
+### VS Code Setup
+
+To run Visual Studio Code on your Windows host and use the VS Code Server on your Ubuntu WSL, you don't need to install the full VS Code package on your Ubuntu WSL system. Instead, you can connect to the WSL from your Windows VS Code installation. Here’s how to do it:
+
+Install the WSL Extension for VS Code:
+
+- Open VS Code on your Windows machine.
+- Go to the Extensions view by clicking on the Extensions icon on the sidebar or pressing `Ctrl+Shift+X`.
+- Search for "Remote - WSL" and install the extension. This extension allows you to use VS Code with WSL and will handle installing the VS Code Server on the WSL side.
+
+Open Your WSL Folder in VS Code:
+
+- Once the extension is installed, open a new WSL terminal (from Ubuntu in WSL).
+- In the WSL terminal, navigate to your project directory.
+- Run the following command from your WSL terminal to open the folder in VS Code:
+
+```bash
+code .
+```
+
+This will trigger VS Code on your Windows machine to connect to the Ubuntu WSL instance and automatically install the VS Code Server on your WSL system.
+
+Verify the Setup:
+
+Check that you are connected to the WSL by looking at the bottom-left corner of the VS Code window. It should show WSL: Ubuntu (or your specific WSL distro name).
+You can also open the integrated terminal in VS Code (``Ctrl+` ``) to confirm it’s running in WSL.
 
 ## Customization
 
