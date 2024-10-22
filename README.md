@@ -197,6 +197,12 @@ Verify python-launcher and show the installed Python versions:
 py --list
 ```
 
+Verify asdf and show the installed Python versions:
+
+```bash
+asdf list python
+```
+
 Default is the highest version. Use flags to launch specific versions of Python:
 
 ```bash
