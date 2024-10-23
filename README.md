@@ -269,11 +269,11 @@ Install the WSL Extension for VS Code:
 
 - Open VS Code on your Windows machine.
 - Go to the Extensions view by clicking on the Extensions icon on the sidebar or pressing `Ctrl+Shift+X`.
-- Search for "WSL" and install the Visual Studio Code WSL extension. This extension allows you to use VS Code with WSL and will handle installing the VS Code Server on the WSL side.
+- Search for "WSL" and install the Visual Studio Code WSL extension (just called `WSL`) and `Remote Development`. Both of these are official extensions created by Microsoft. These two extensions allow you to use VS Code with WSL and will handle installing the VS Code Server on the WSL side.
 
 Open Your WSL Folder in VS Code:
 
-- Once the extension is installed, open a new WSL terminal (from Ubuntu in WSL).
+- Once the extensions are installed, open a new WSL terminal (from Ubuntu in WSL).
 - In the WSL terminal, navigate to your project directory.
 - Run the following command from your WSL terminal to open the folder in VS Code:
 
