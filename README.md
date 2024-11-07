@@ -126,6 +126,12 @@ Exit WSL and run this from your Windows command prompt (CMD or PowerShell):
 wsl -d Ubuntu-24.04 -u marmor
 ```
 
+if that does not seem to work, try this, which worked when the command above did not:
+
+```PS
+ubuntu2004 config --default-user marmor
+```
+
 #### Tearing Down Ubuntu in WSL2
 
 Shut down *ALL* the WSL distros:
@@ -269,24 +275,13 @@ Install the WSL Extension for VS Code:
 
 - Open VS Code on your Windows machine.
 - Go to the Extensions view by clicking on the Extensions icon on the sidebar or pressing `Ctrl+Shift+X`.
-- Search for "WSL" and install the Visual Studio Code WSL extension (just called `WSL`) and `Remote Development`. Both of these are official extensions created by Microsoft. These two extensions allow you to use VS Code with WSL and will handle installing the VS Code Server on the WSL side.
+- Search for "WSL" and install the Visual Studio Code WSL extension (just called `WSL`). This is an official extensions created by Microsoft. This extensions allows you to use VS Code with WSL and will handle installing the VS Code Server on the WSL side.
 
-Open Your WSL Folder in VS Code:
-
-- Once the extensions are installed, open a new WSL terminal (from Ubuntu in WSL).
-- In the WSL terminal, navigate to your project directory.
-- Run the following command from your WSL terminal to open the folder in VS Code:
-
-```bash
-code .
-```
-
-- This will trigger VS Code on your Windows machine to connect to the Ubuntu WSL instance and automatically install the VS Code Server on your WSL system.
+Rather than initiating VS Code from within Ubuntu, I have had better luck starting VS Code on Windows and then connecting to WSL from there.
 
 Verify the Setup:
 
-Check that you are connected to the WSL by looking at the bottom-left corner of the VS Code window. It should show WSL: Ubuntu (or your specific WSL distro name).
-You can also open the integrated terminal in VS Code (``Ctrl+` ``) to confirm it’s running in WSL.
+Check that you are connected to the WSL by looking at the bottom-left corner of the VS Code window. It should show WSL: Ubuntu (or your specific WSL distro name). You can also open the integrated terminal in VS Code (``Ctrl+` ``) to confirm it’s running in WSL.
 
 ## Customization
 
