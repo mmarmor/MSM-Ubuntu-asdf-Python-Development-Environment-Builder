@@ -4,7 +4,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see https://www.gnu.org/licenses/.
 #
-# pyqwer.sh | MSM 24-Jan-2024
+# pyqwer.sh | MSM 30-Dec-2024
 
 # Summary:
 #
@@ -90,7 +90,7 @@ libffi-dev liblzma-dev cargo tree
 log_message "Dependencies installation completed!" "$GREEN"
 
 ## Installing asdf
-ASDF_VERSION="v0.14.1" # Check https://asdf-vm.com/guide/getting-started.html for the latest version
+ASDF_VERSION="v0.15.0" # Check https://asdf-vm.com/guide/getting-started.html for the latest version
 log_message "Installing asdf..." "$GREEN"
 # Temporarily set advice.detachedHead to false for this operation
 GIT_CONFIG_NO_DETACHED_ADVICE="git -c advice.detachedHead=false"
