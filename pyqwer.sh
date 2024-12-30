@@ -162,11 +162,13 @@ log_message "Python tools installation completed!" "$GREEN"
 # Installing Aider with pipx
 log_message "Installing Aider with pipx..." "$GREEN"
 "$HOME/.local/bin/pipx" install aider-chat
+log_message "Aider installation completed!" "$GREEN"
 
 # Installing Playwright with dependencies
 log_message "Installing Playwright with dependencies..." "$GREEN"
 "$HOME/.local/bin/pipx" inject aider-chat playwright
 "$HOME/.local/bin/playwright" install --with-deps chromium
+log_message "Playwright installation completed!" "$GREEN"
 
 log_message "pyqwer setup script completed." "$GREEN"
 log_message "To apply the changes made by this script to your current shell: source ~/.bashrc" "$BLUE"
