@@ -202,8 +202,8 @@ ensure_python_build_deps() {
     
     # Check if python3-distutils is needed (only for older Python versions)
     PYTHON_VERSION=$($PYTHON_BIN_PATH --version 2>&1 | awk '{print $2}')
-    PYTHON_MAJOR=$(echo $PYTHON_VERSION | awk -F. '{print $1}')
-    PYTHON_MINOR=$(echo $PYTHON_VERSION | awk -F. '{print $2}')
+    PYTHON_MAJOR=$(echo $PYTHON_VERSION | awk -F. '{print $1}' | tr -cd '[:digit:]')
+    PYTHON_MINOR=$(echo $PYTHON_VERSION | awk -F. '{print $2}' | tr -cd '[:digit:]')
     
     # Only attempt to install distutils for Python < 3.12
     if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 12 ]; then
