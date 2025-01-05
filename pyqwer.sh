@@ -168,8 +168,14 @@ fi
 ## Installing Python Versions
 log_message "Running Python script for installing Python versions..." "$GREEN"
 source "$HOME/.asdf/asdf.sh"
-python3 latest-pythons.py
-log_message "Python versions installation completed!" "$GREEN"
+
+# Run the Python script with auto-confirm
+if python3 latest-pythons.py <<< "y"; then
+    log_message "Python versions installation completed!" "$GREEN"
+else
+    log_message "Python versions installation failed!" "$RED"
+    exit 1
+fi
 
 ## Installing python-launcher
 log_message "Installing python-launcher using cargo..." "$GREEN"
