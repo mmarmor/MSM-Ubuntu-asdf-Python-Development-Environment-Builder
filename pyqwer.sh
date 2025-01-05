@@ -148,8 +148,28 @@ if [[ $- == *i* ]]; then
     source "$BASHRC_PATH"
 fi
 
+## Ensure Python build dependencies
+ensure_python_build_deps() {
+    log_message "Ensuring Python build dependencies..." "$GREEN"
+    # Install system packages
+    sudo apt install -y python3-distutils python3-dev build-essential
+    
+    # Install pip packages
+    $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel distutils
+    
+    # Verify installation
+    if ! $PYTHON_BIN_PATH -c "import distutils" &>/dev/null; then
+        log_message "Failed to setup Python build environment!" "$RED"
+        exit 1
+    fi
+    log_message "Python build dependencies verified." "$GREEN"
+}
+
 ## Upgrading pip and Installing pipx
 log_message "Upgrading pip and installing pipx..." "$GREEN"
+# Ensure build dependencies are installed first
+ensure_python_build_deps
+
 # Determine Python binary path
 PYTHON_BIN_PATH="python3"
 if command -v asdf > /dev/null; then
