@@ -36,6 +36,7 @@ function call to change the number of versions to install.
 
 import subprocess
 import os
+import sys
 
 def create_default_python_packages_file():
     """
