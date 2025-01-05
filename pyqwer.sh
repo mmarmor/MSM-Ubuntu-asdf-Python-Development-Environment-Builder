@@ -207,6 +207,20 @@ ensure_python_build_deps() {
         log_message "python3-distutils not available in repositories, skipping..." "$YELLOW"
     fi
     
+    # Determine Python binary path with fallback
+    PYTHON_BIN_PATH="python3"
+    if command_exists asdf; then
+        ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
+        if [ -n "$ASDF_PYTHON_VERSION" ]; then
+            ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
+            if [ -f "$ASDF_PYTHON_PATH" ]; then
+                PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
+            else
+                log_message "Warning: asdf Python version found but binary not found at $ASDF_PYTHON_PATH" "$YELLOW"
+            fi
+        fi
+    fi
+    
     # Verify Python binary exists
     if ! command_exists "$PYTHON_BIN_PATH"; then
         log_message "Error: Python binary not found at $PYTHON_BIN_PATH" "$RED"
