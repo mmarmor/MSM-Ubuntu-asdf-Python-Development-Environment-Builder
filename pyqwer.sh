@@ -200,11 +200,20 @@ ensure_python_build_deps() {
         exit 1
     fi
     
-    # Try installing python3-distutils if available
-    if apt-cache show python3-distutils > /dev/null 2>&1; then
-        sudo apt install -y python3-distutils
+    # Check if python3-distutils is needed (only for older Python versions)
+    PYTHON_VERSION=$($PYTHON_BIN_PATH --version 2>&1 | awk '{print $2}')
+    PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d. -f1)
+    PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d. -f2)
+    
+    # Only attempt to install distutils for Python < 3.12
+    if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 12 ]; then
+        if apt-cache show python3-distutils > /dev/null 2>&1; then
+            sudo apt install -y python3-distutils
+        else
+            log_message "python3-distutils not available but not required for Python $PYTHON_VERSION" "$BLUE"
+        fi
     else
-        log_message "python3-distutils not available in repositories, skipping..." "$YELLOW"
+        log_message "python3-distutils not required for Python $PYTHON_VERSION" "$BLUE"
     fi
     
     # Determine Python binary path with fallback
