@@ -145,6 +145,7 @@ def install_python_versions(count=3):
         # Verify asdf is installed
         subprocess.run(['asdf', '--version'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
+        # Get available versions
         output = subprocess.check_output(['asdf', 'list', 'all', 'python']).decode('utf-8')
         versions = get_latest_asdf_versions(output, count=count)
         
@@ -153,7 +154,7 @@ def install_python_versions(count=3):
             return
 
         print(f"\nThe following Python versions will be installed: {', '.join(versions)}")
-        print("Python {versions[0]} will be set as the global default.")
+        print(f"Python {versions[0]} will be set as the global default.")
         response = input("Do you want to continue? [Y/n]: ").strip().lower()
         
         if response and response != 'y':
@@ -172,6 +173,11 @@ def install_python_versions(count=3):
         asdf_global_command = ['asdf', 'global', 'python'] + versions
         print(f"\nSetting Python versions {', '.join(versions)} as global versions...")
         subprocess.run(asdf_global_command, check=True)
+        
+        # Verify installation
+        print("\nVerifying installed versions...")
+        installed_versions = subprocess.check_output(['asdf', 'list', 'python']).decode('utf-8')
+        print(installed_versions)
         
     except subprocess.CalledProcessError as e:
         print(f"\nError: {e}")

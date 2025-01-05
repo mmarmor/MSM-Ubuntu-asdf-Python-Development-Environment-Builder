@@ -166,11 +166,9 @@ if [[ $- == *i* ]]; then
 fi
 
 ## Installing Python Versions
-log_message "Running Python script for installing Python versions in a subshell..." "$GREEN"
-(
-    source "$HOME/.asdf/asdf.sh"
-    python3 latest-pythons.py
-)
+log_message "Running Python script for installing Python versions..." "$GREEN"
+source "$HOME/.asdf/asdf.sh"
+python3 latest-pythons.py
 log_message "Python versions installation completed!" "$GREEN"
 
 ## Installing python-launcher
