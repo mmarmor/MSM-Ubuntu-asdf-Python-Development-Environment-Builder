@@ -58,19 +58,30 @@
 # Some find it provides a more standard Rust environment on many systems.
 
 # Function to ensure Python build dependencies
+ensure_pipx_build_deps() {
+    log_message "Ensuring pipx build dependencies..." "$GREEN"
+    # Get pipx's Python path
+    PIPX_PYTHON=$(pipx environment | grep 'PIPX_DEFAULT_PYTHON' | cut -d'=' -f2)
+    
+    # Install specific versions only for pipx's Python
+    $PIPX_PYTHON -m pip install --upgrade "setuptools<66.0.0" "pip<23.1" wheel distutils
+    
+    # Verify installation
+    if ! $PIPX_PYTHON -c "import distutils" &>/dev/null; then
+        log_message "Failed to setup pipx build environment!" "$RED"
+        exit 1
+    fi
+    log_message "pipx build dependencies verified." "$GREEN"
+}
+
 ensure_python_build_deps() {
     log_message "Ensuring Python build dependencies..." "$GREEN"
     # Install system packages
     sudo apt install -y python3-distutils python3-dev build-essential
     
-    # Install pip packages
-    $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel distutils
+    # Install latest pip packages for regular Python
+    $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel
     
-    # Verify installation
-    if ! $PYTHON_BIN_PATH -c "import distutils" &>/dev/null; then
-        log_message "Failed to setup Python build environment!" "$RED"
-        exit 1
-    fi
     log_message "Python build dependencies verified." "$GREEN"
 }
 
@@ -184,21 +195,7 @@ ensure_python_build_deps() {
 
 ## Upgrading pip and Installing pipx
 log_message "Upgrading pip and installing pipx..." "$GREEN"
-# Ensure build dependencies are installed first
-ensure_python_build_deps
-
-# Determine Python binary path
-PYTHON_BIN_PATH="python3"
-if command -v asdf > /dev/null; then
-    ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
-    if [ -n "$ASDF_PYTHON_VERSION" ]; then
-        ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
-        if [ -f "$ASDF_PYTHON_PATH" ]; then
-            PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
-        fi
-    fi
-fi
-# Ensure build dependencies are installed first
+# Ensure regular build dependencies
 ensure_python_build_deps
 
 # Determine Python binary path
@@ -217,6 +214,10 @@ $PYTHON_BIN_PATH -m pip install --upgrade pip
 $PYTHON_BIN_PATH -m pip install --user pipx
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC_PATH"
 export PATH="$HOME/.local/bin:$PATH"
+
+# Ensure pipx-specific build dependencies
+ensure_pipx_build_deps
+
 log_message "Pip and pipx installation completed!" "$GREEN"
 
 if [[ $- == *i* ]]; then
@@ -233,10 +234,10 @@ log_message "Python tools installation completed!" "$GREEN"
 
 ## Installing Aider with pipx
 log_message "Installing Aider with pipx..." "$GREEN"
-if ! "$HOME/.local/bin/pipx" install aider-chat; then
+if ! "$HOME/.local/bin/pipx" install aider-chat --pip-args="--prefer-binary --no-build-isolation"; then
     log_message "First Aider installation attempt failed. Retrying with build dependencies..." "$YELLOW"
-    ensure_python_build_deps
-    if ! "$HOME/.local/bin/pipx" install aider-chat; then
+    ensure_pipx_build_deps
+    if ! "$HOME/.local/bin/pipx" install aider-chat --pip-args="--prefer-binary --no-build-isolation"; then
         log_message "Aider installation failed. Skipping Playwright injection..." "$RED"
         AIDER_INSTALL_SUCCESS=false
     else
