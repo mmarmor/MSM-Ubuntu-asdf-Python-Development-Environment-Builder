@@ -57,6 +57,23 @@
 #   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # Some find it provides a more standard Rust environment on many systems.
 
+# Function to ensure Python build dependencies
+ensure_python_build_deps() {
+    log_message "Ensuring Python build dependencies..." "$GREEN"
+    # Install system packages
+    sudo apt install -y python3-distutils python3-dev build-essential
+    
+    # Install pip packages
+    $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel distutils
+    
+    # Verify installation
+    if ! $PYTHON_BIN_PATH -c "import distutils" &>/dev/null; then
+        log_message "Failed to setup Python build environment!" "$RED"
+        exit 1
+    fi
+    log_message "Python build dependencies verified." "$GREEN"
+}
+
 # Function to log messages with a newline after each message
 log_message() {
     local message=$1
@@ -181,6 +198,20 @@ if command -v asdf > /dev/null; then
         fi
     fi
 fi
+# Ensure build dependencies are installed first
+ensure_python_build_deps
+
+# Determine Python binary path
+PYTHON_BIN_PATH="python3"
+if command -v asdf > /dev/null; then
+    ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
+    if [ -n "$ASDF_PYTHON_VERSION" ]; then
+        ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
+        if [ -f "$ASDF_PYTHON_PATH" ]; then
+            PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
+        fi
+    fi
+fi
 
 $PYTHON_BIN_PATH -m pip install --upgrade pip
 $PYTHON_BIN_PATH -m pip install --user pipx
@@ -203,8 +234,15 @@ log_message "Python tools installation completed!" "$GREEN"
 ## Installing Aider with pipx
 log_message "Installing Aider with pipx..." "$GREEN"
 if ! "$HOME/.local/bin/pipx" install aider-chat; then
-    log_message "Aider installation failed. Skipping Playwright injection..." "$RED"
-    AIDER_INSTALL_SUCCESS=false
+    log_message "First Aider installation attempt failed. Retrying with build dependencies..." "$YELLOW"
+    ensure_python_build_deps
+    if ! "$HOME/.local/bin/pipx" install aider-chat; then
+        log_message "Aider installation failed. Skipping Playwright injection..." "$RED"
+        AIDER_INSTALL_SUCCESS=false
+    else
+        AIDER_INSTALL_SUCCESS=true
+        log_message "Aider installation completed!" "$GREEN"
+    fi
 else
     AIDER_INSTALL_SUCCESS=true
     log_message "Aider installation completed!" "$GREEN"
