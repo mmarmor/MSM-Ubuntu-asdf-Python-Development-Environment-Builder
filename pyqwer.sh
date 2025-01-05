@@ -90,6 +90,11 @@ ensure_python_build_deps() {
     log_message "Python build dependencies verified." "$GREEN"
 }
 
+# Function to check if command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
 # Function to log messages with a newline after each message
 log_message() {
     local message=$1
@@ -184,40 +189,72 @@ fi
 ## Ensure Python build dependencies
 ensure_python_build_deps() {
     log_message "Ensuring Python build dependencies..." "$GREEN"
+    
     # Install system packages
     sudo apt install -y python3-distutils python3-dev build-essential
     
+    # Verify Python binary exists
+    if ! command_exists "$PYTHON_BIN_PATH"; then
+        log_message "Error: Python binary not found at $PYTHON_BIN_PATH" "$RED"
+        exit 1
+    fi
+    
     # Install pip packages
-    $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel distutils
+    if ! $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel distutils; then
+        log_message "Failed to install Python build tools" "$RED"
+        exit 1
+    fi
     
     # Verify installation
     if ! $PYTHON_BIN_PATH -c "import distutils" &>/dev/null; then
         log_message "Failed to setup Python build environment!" "$RED"
         exit 1
     fi
+    
     log_message "Python build dependencies verified." "$GREEN"
 }
 
 ## Upgrading pip and Installing pipx
 log_message "Upgrading pip and installing pipx..." "$GREEN"
+
 # Ensure regular build dependencies
 ensure_python_build_deps
 
-# Determine Python binary path
+# Determine Python binary path with fallback
 PYTHON_BIN_PATH="python3"
-if command -v asdf > /dev/null; then
+if command_exists asdf; then
     ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
     if [ -n "$ASDF_PYTHON_VERSION" ]; then
         ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
         if [ -f "$ASDF_PYTHON_PATH" ]; then
             PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
+        else
+            log_message "Warning: asdf Python version found but binary not found at $ASDF_PYTHON_PATH" "$YELLOW"
         fi
     fi
 fi
 
-$PYTHON_BIN_PATH -m pip install --upgrade pip
-$PYTHON_BIN_PATH -m pip install --user pipx
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC_PATH"
+# Verify Python binary exists
+if ! command_exists "$PYTHON_BIN_PATH"; then
+    log_message "Error: Python binary not found at $PYTHON_BIN_PATH" "$RED"
+    exit 1
+fi
+
+# Install/upgrade pip and pipx
+if ! $PYTHON_BIN_PATH -m pip install --upgrade pip; then
+    log_message "Failed to upgrade pip" "$RED"
+    exit 1
+fi
+
+if ! $PYTHON_BIN_PATH -m pip install --user pipx; then
+    log_message "Failed to install pipx" "$RED"
+    exit 1
+fi
+
+# Update PATH if not already present
+if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$BASHRC_PATH"; then
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC_PATH"
+fi
 export PATH="$HOME/.local/bin:$PATH"
 
 # Ensure pipx-specific build dependencies
