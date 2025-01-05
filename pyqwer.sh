@@ -73,40 +73,8 @@ ensure_pipx_build_deps() {
     # First ensure pip is up-to-date
     $PIPX_PIP install --upgrade pip
     
-    # Install specific legacy versions that include distutils
-    $PIPX_PIP install --upgrade "setuptools<66.0.0" "pip<23.1" wheel
-    
-    # Install distutils package explicitly
-    $PIPX_PIP install distutils
-    
-    # Verify installation
-    if ! $PIPX_PYTHON -c "import distutils" &>/dev/null; then
-        log_message "Failed to setup pipx build environment! Trying alternative approach..." "$YELLOW"
-        
-        # Try installing distutils via system package
-        sudo apt install -y python3-distutils
-        
-        # Verify again
-        if ! $PIPX_PYTHON -c "import distutils" &>/dev/null; then
-            log_message "Trying manual distutils installation..." "$YELLOW"
-            
-            # Download and install distutils manually
-            TEMP_DIR=$(mktemp -d)
-            pushd "$TEMP_DIR" > /dev/null
-            curl -O https://files.pythonhosted.org/packages/57/8f/4031051d0834dc242516f1f9f4acd0e64b3a5ee5544e8889161abdf7e98d/distutils-1.0.1.tar.gz
-            tar -xzf distutils-1.0.1.tar.gz
-            cd distutils-1.0.1
-            $PIPX_PYTHON setup.py install
-            popd > /dev/null
-            rm -rf "$TEMP_DIR"
-            
-            # Final verification
-            if ! $PIPX_PYTHON -c "import distutils" &>/dev/null; then
-                log_message "Failed to setup pipx build environment!" "$RED"
-                exit 1
-            fi
-        fi
-    fi
+    # Install standard build tools
+    $PIPX_PIP install --upgrade setuptools wheel
     
     log_message "pipx build dependencies verified." "$GREEN"
 }
@@ -268,43 +236,6 @@ log_message "Installing Python tools with pipx..." "$GREEN"
 "$HOME/.local/bin/pipx" install pre-commit
 "$HOME/.local/bin/pipx" install cookiecutter
 log_message "Python tools installation completed!" "$GREEN"
-
-## Installing Aider with pipx
-log_message "Installing Aider with pipx..." "$GREEN"
-
-# Ensure pipx build dependencies are properly set up
-ensure_pipx_build_deps
-
-# Try installing aider with specific numpy version
-if ! "$HOME/.local/bin/pipx" install aider-chat --pip-args="--prefer-binary --no-build-isolation --constraint https://raw.githubusercontent.com/numpy/numpy/main/pyproject.toml"; then
-    log_message "First Aider installation attempt failed. Trying alternative approach..." "$YELLOW"
-    
-    # Try installing numpy first
-    PIPX_PYTHON=$(pipx environment | grep 'PIPX_DEFAULT_PYTHON' | cut -d'=' -f2)
-    $PIPX_PYTHON -m pip install numpy==1.24.3 --prefer-binary --no-build-isolation
-    
-    # Retry aider installation
-    if ! "$HOME/.local/bin/pipx" install aider-chat --pip-args="--prefer-binary --no-build-isolation"; then
-        log_message "Aider installation failed. Skipping Playwright injection..." "$RED"
-        AIDER_INSTALL_SUCCESS=false
-    else
-        AIDER_INSTALL_SUCCESS=true
-        log_message "Aider installation completed!" "$GREEN"
-    fi
-else
-    AIDER_INSTALL_SUCCESS=true
-    log_message "Aider installation completed!" "$GREEN"
-fi
-
-## Installing Playwright with dependencies (only if Aider installed)
-if [ "$AIDER_INSTALL_SUCCESS" = true ]; then
-    log_message "Installing Playwright with dependencies..." "$GREEN"
-    "$HOME/.local/bin/pipx" inject aider-chat playwright
-    "$HOME/.local/bin/playwright" install --with-deps chromium
-    log_message "Playwright installation completed!" "$GREEN"
-else
-    log_message "Skipping Playwright installation due to Aider failure." "$YELLOW"
-fi
 
 log_message "pyqwer setup script completed." "$GREEN"
 log_message "To apply the changes made by this script to your current shell: source ~/.bashrc" "$BLUE"
