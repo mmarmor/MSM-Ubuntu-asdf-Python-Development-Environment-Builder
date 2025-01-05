@@ -202,8 +202,8 @@ ensure_python_build_deps() {
     
     # Check if python3-distutils is needed (only for older Python versions)
     PYTHON_VERSION=$($PYTHON_BIN_PATH --version 2>&1 | awk '{print $2}')
-    PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d. -f1)
-    PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d. -f2)
+    PYTHON_MAJOR=$(echo $PYTHON_VERSION | awk -F. '{print $1}')
+    PYTHON_MINOR=$(echo $PYTHON_VERSION | awk -F. '{print $2}')
     
     # Only attempt to install distutils for Python < 3.12
     if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 12 ]; then
@@ -227,11 +227,16 @@ ensure_python_build_deps() {
             # Fallback to checking current version
             ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
             if [ -n "$ASDF_PYTHON_VERSION" ]; then
+                # Try both python and python3 binaries
                 ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
+                ASDF_PYTHON3_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python3"
+                
                 if [ -f "$ASDF_PYTHON_PATH" ]; then
                     PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
+                elif [ -f "$ASDF_PYTHON3_PATH" ]; then
+                    PYTHON_BIN_PATH="$ASDF_PYTHON3_PATH"
                 else
-                    log_message "Warning: asdf Python version found but binary not found at $ASDF_PYTHON_PATH" "$YELLOW"
+                    log_message "Warning: asdf Python version found but binary not found at $ASDF_PYTHON_PATH or $ASDF_PYTHON3_PATH" "$YELLOW"
                 fi
             fi
         fi
@@ -295,11 +300,17 @@ if ! $PYTHON_BIN_PATH -m pip install --user pipx; then
     exit 1
 fi
 
-# Update PATH if not already present
+# Update PATH early to ensure pipx and other tools are available
 if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$BASHRC_PATH"; then
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC_PATH"
 fi
 export PATH="$HOME/.local/bin:$PATH"
+
+# Also ensure asdf paths are available early
+if ! grep -q 'export PATH="$HOME/.asdf/bin:$PATH"' "$BASHRC_PATH"; then
+    echo 'export PATH="$HOME/.asdf/bin:$PATH"' >> "$BASHRC_PATH"
+fi
+export PATH="$HOME/.asdf/bin:$PATH"
 
 # Ensure pipx-specific build dependencies
 ensure_pipx_build_deps
