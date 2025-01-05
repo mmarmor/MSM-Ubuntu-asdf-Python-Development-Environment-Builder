@@ -190,8 +190,18 @@ fi
 ensure_python_build_deps() {
     log_message "Ensuring Python build dependencies..." "$GREEN"
     
-    # Install system packages
-    sudo apt install -y python3-distutils python3-dev build-essential
+    # Install system packages (skip python3-distutils if not available)
+    if ! sudo apt install -y python3-dev build-essential; then
+        log_message "Failed to install system build dependencies" "$RED"
+        exit 1
+    fi
+    
+    # Try installing python3-distutils if available
+    if apt-cache show python3-distutils > /dev/null 2>&1; then
+        sudo apt install -y python3-distutils
+    else
+        log_message "python3-distutils not available in repositories, skipping..." "$YELLOW"
+    fi
     
     # Verify Python binary exists
     if ! command_exists "$PYTHON_BIN_PATH"; then
@@ -200,13 +210,13 @@ ensure_python_build_deps() {
     fi
     
     # Install pip packages
-    if ! $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel distutils; then
+    if ! $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel; then
         log_message "Failed to install Python build tools" "$RED"
         exit 1
     fi
     
     # Verify installation
-    if ! $PYTHON_BIN_PATH -c "import distutils" &>/dev/null; then
+    if ! $PYTHON_BIN_PATH -c "import setuptools" &>/dev/null; then
         log_message "Failed to setup Python build environment!" "$RED"
         exit 1
     fi
