@@ -4,7 +4,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see https://www.gnu.org/licenses/.
 #
-# pyqwer.sh | MSM 30-Dec-2024
+# pyqwer.sh | MSM 05-Jan-2025
 
 # Summary:
 #
@@ -28,7 +28,7 @@
 # Ensure 'latest-pythons.py' is available and executable
 # in the same directory as this script.
 #
-#---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
 # Other notes:
 #
 # Full W11/WSL2 Ubuntu buildout using my two scripts:
@@ -51,7 +51,11 @@
 # marmor@MANTIS:~$ source pyqwer.sh
 #
 # That should build the entire dev environment
-#---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+
+# Note: Another recommended approach is installing Rust with rustup, e.g.
+#   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# Some find it provides a more standard Rust environment on many systems.
 
 # Function to log messages with a newline after each message
 log_message() {
@@ -77,22 +81,26 @@ log_message "Removing unnecessary packages..." "$GREEN"
 sudo apt autoremove -y
 log_message "Cleaning up APT cache..." "$GREEN"
 sudo apt autoclean
+
 (command -v snap > /dev/null && log_message "Refreshing Snap packages..." "$GREEN" && sudo snap refresh) || echo "Snap not installed."
 (command -v flatpak > /dev/null && log_message "Updating Flatpak packages..." "$GREEN" && flatpak update -y) || echo "Flatpak not installed."
+
+# Optional step: Install GitHub CLI if snap is available
+(command -v snap > /dev/null && log_message "Installing GitHub CLI via snap..." "$GREEN" && sudo snap install gh) || echo "Snap or gh snap not available."
+
 log_message "System update process completed!" "$GREEN"
 
-## Installing Dependencies for asdf and Python
+## Installing Dependencies for asdf and Python (including distutils)
 log_message "Installing dependencies..." "$GREEN"
 sudo apt install -y build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev curl \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
-libffi-dev liblzma-dev cargo tree
+libffi-dev liblzma-dev cargo tree python3-distutils
 log_message "Dependencies installation completed!" "$GREEN"
 
 ## Installing asdf
-ASDF_VERSION="v0.15.0" # Check https://asdf-vm.com/guide/getting-started.html for the latest version
+ASDF_VERSION="v0.15.0"
 log_message "Installing asdf..." "$GREEN"
-# Temporarily set advice.detachedHead to false for this operation
 GIT_CONFIG_NO_DETACHED_ADVICE="git -c advice.detachedHead=false"
 $GIT_CONFIG_NO_DETACHED_ADVICE clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "$ASDF_VERSION"
 . "$HOME/.asdf/asdf.sh"
@@ -104,7 +112,6 @@ echo '. "$HOME/.asdf/asdf.sh"' >> "$BASHRC_PATH"
 echo '. "$HOME/.asdf/completions/asdf.bash"' >> "$BASHRC_PATH"
 log_message ".bashrc update for asdf completed!" "$GREEN"
 
-# Source .bashrc if it's an interactive shell
 if [[ $- == *i* ]]; then
     source "$BASHRC_PATH"
 fi
@@ -113,7 +120,6 @@ fi
 log_message "Running Python script for installing Python versions in a subshell..." "$GREEN"
 (
     source "$HOME/.asdf/asdf.sh"
-    # Use python3 to run the script, as asdf-installed Python versions are not yet available
     python3 latest-pythons.py
 )
 log_message "Python versions installation completed!" "$GREEN"
@@ -127,18 +133,14 @@ export PATH="$HOME/.cargo/bin:$PATH"
 log_message "Listing available Python versions..." "$GREEN"
 py --list
 
-# Source .bashrc again to include new PATH updates
 if [[ $- == *i* ]]; then
     source "$BASHRC_PATH"
 fi
 
 ## Upgrading pip and Installing pipx
 log_message "Upgrading pip and installing pipx..." "$GREEN"
-# Determine the Python version installed by asdf, fallback to python3 if not set
 PYTHON_BIN_PATH="$HOME/.asdf/installs/python/$(asdf current python | cut -d ' ' -f 1)/bin/python"
-if [ ! -f "$PYTHON_BIN_PATH" ]; then
-    PYTHON_BIN_PATH="python3"
-fi
+[ ! -f "$PYTHON_BIN_PATH" ] && PYTHON_BIN_PATH="python3"
 
 $PYTHON_BIN_PATH -m pip install --upgrade pip
 $PYTHON_BIN_PATH -m pip install --user pipx
@@ -146,7 +148,6 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC_PATH"
 export PATH="$HOME/.local/bin:$PATH"
 log_message "Pip and pipx installation completed!" "$GREEN"
 
-# Source .bashrc once more to update PATH
 if [[ $- == *i* ]]; then
     source "$BASHRC_PATH"
 fi
@@ -159,17 +160,25 @@ log_message "Installing Python tools with pipx..." "$GREEN"
 "$HOME/.local/bin/pipx" install cookiecutter
 log_message "Python tools installation completed!" "$GREEN"
 
-# Installing Aider with pipx
+## Installing Aider with pipx
 log_message "Installing Aider with pipx..." "$GREEN"
-"$HOME/.local/bin/pipx" install aider-chat
-log_message "Aider installation completed!" "$GREEN"
+if ! "$HOME/.local/bin/pipx" install aider-chat; then
+    log_message "Aider installation failed. Skipping Playwright injection..." "$RED"
+    AIDER_INSTALL_SUCCESS=false
+else
+    AIDER_INSTALL_SUCCESS=true
+    log_message "Aider installation completed!" "$GREEN"
+fi
 
-# Installing Playwright with dependencies
-log_message "Installing Playwright with dependencies..." "$GREEN"
-"$HOME/.local/bin/pipx" inject aider-chat playwright
-"$HOME/.local/bin/playwright" install --with-deps chromium
-log_message "Playwright installation completed!" "$GREEN"
+## Installing Playwright with dependencies (only if Aider installed)
+if [ "$AIDER_INSTALL_SUCCESS" = true ]; then
+    log_message "Installing Playwright with dependencies..." "$GREEN"
+    "$HOME/.local/bin/pipx" inject aider-chat playwright
+    "$HOME/.local/bin/playwright" install --with-deps chromium
+    log_message "Playwright installation completed!" "$GREEN"
+else
+    log_message "Skipping Playwright installation due to Aider failure." "$YELLOW"
+fi
 
 log_message "pyqwer setup script completed." "$GREEN"
 log_message "To apply the changes made by this script to your current shell: source ~/.bashrc" "$BLUE"
-#log_message "Or, for a complete refresh of the shell environment: exec \"$SHELL\"" "$BLUE"
