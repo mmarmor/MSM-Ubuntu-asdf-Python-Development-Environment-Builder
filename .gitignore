@@ -199,4 +199,8 @@ pyrightconfig.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,powershell
+# Ignore dynamically downloaded scripts
+pyqwer-from-github.sh
+
+# Aider files
 .aider*

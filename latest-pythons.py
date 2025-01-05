@@ -40,11 +40,23 @@ import os
 def create_default_python_packages_file():
     """
     Creates the '~/.default-python-packages' file and writes a list of essential packages.
+    If file exists, appends missing packages instead of overwriting.
     """
     default_packages_path = os.path.expanduser("~/.default-python-packages")
     packages = ["pip", "setuptools", "wheel"]
 
-    if not os.path.exists(default_packages_path):
+    if os.path.exists(default_packages_path):
+        # Read existing packages
+        with open(default_packages_path, "r") as file:
+            existing_packages = set(line.strip() for line in file.readlines())
+        
+        # Add only new packages
+        with open(default_packages_path, "a") as file:
+            for package in packages:
+                if package not in existing_packages:
+                    file.write(package + "\n")
+    else:
+        # Create new file with all packages
         with open(default_packages_path, "w") as file:
             for package in packages:
                 file.write(package + "\n")
@@ -129,19 +141,41 @@ def install_python_versions(count=3):
     add_asdf_python_plugin()
 
     try:
+        # Verify asdf is installed
+        subprocess.run(['asdf', '--version'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
         output = subprocess.check_output(['asdf', 'list', 'all', 'python']).decode('utf-8')
         versions = get_latest_asdf_versions(output, count=count)
         
+        if not versions:
+            print("No valid Python 3.x versions found in asdf.")
+            return
+
+        print(f"\nThe following Python versions will be installed: {', '.join(versions)}")
+        print("Python {versions[0]} will be set as the global default.")
+        response = input("Do you want to continue? [Y/n]: ").strip().lower()
+        
+        if response and response != 'y':
+            print("Installation cancelled.")
+            return
+
         for version in versions:
-            print(f"Installing Python {version}...")
-            subprocess.run(['asdf', 'install', 'python', version])
+            print(f"\nInstalling Python {version}...")
+            try:
+                subprocess.run(['asdf', 'install', 'python', version], check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"Failed to install Python {version}: {e}")
+                continue
 
         # Setting the most recent version as the first global version and including the others
         asdf_global_command = ['asdf', 'global', 'python'] + versions
-        print(f"Setting Python versions {', '.join(versions)} as global versions...")
-        subprocess.run(asdf_global_command)
+        print(f"\nSetting Python versions {', '.join(versions)} as global versions...")
+        subprocess.run(asdf_global_command, check=True)
+        
     except subprocess.CalledProcessError as e:
-        print(f"Error listing or installing Python versions: {e}")
+        print(f"\nError: {e}")
+        print("Please ensure asdf is installed and properly configured.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     install_python_versions(count=3)  # Change 'count' to install a different number of versions

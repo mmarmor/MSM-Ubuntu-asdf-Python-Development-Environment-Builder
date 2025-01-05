@@ -287,6 +287,28 @@ Check that you are connected to the WSL by looking at the bottom-left corner of 
 
 This script installs the three most recent minor versions of Python (for example, 3.13.X, 3.12.X, 3.11.X) and sets the most recent (3.13.X in the example) as the global default. You can customize the number of Python versions to install by modifying the `count` parameter in the `install_python_versions` function call inside `latest-pythons.py`.
 
+## Troubleshooting
+
+### Common Issues
+
+1. **Missing Dependencies**:
+   Ensure all required dependencies are installed. Run the following command to install missing tools:
+   ```bash
+   sudo apt install -y curl cargo build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev tree
+   ```
+
+2. **Failed Installations**:
+   If the script fails, check the logs for error messages. Common issues include:
+   - Missing `asdf`: Ensure asdf is installed and in your PATH
+   - Missing `curl`: Install with `sudo apt install curl`
+   - Missing `cargo`: Install Rust with `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+
+3. **Python Installation Issues**:
+   If Python versions fail to install:
+   - Ensure you have all build dependencies installed
+   - Check your internet connection
+   - Try running the installation manually: `asdf install python <version>`
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [COPYING](COPYING) file for details.

@@ -99,10 +99,21 @@ libffi-dev liblzma-dev cargo tree
 log_message "Dependencies installation completed!" "$GREEN"
 
 ## Installing asdf
-ASDF_VERSION="v0.15.0"
-log_message "Installing asdf..." "$GREEN"
+log_message "Fetching latest asdf version..." "$GREEN"
+ASDF_VERSION=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | grep -oP '"tag_name": "\K[^"]+')
+
+if [ -z "$ASDF_VERSION" ]; then
+    log_message "Failed to fetch latest asdf version. Using default v0.15.0" "$YELLOW"
+    ASDF_VERSION="v0.15.0"
+fi
+
+log_message "Installing asdf $ASDF_VERSION..." "$GREEN"
 GIT_CONFIG_NO_DETACHED_ADVICE="git -c advice.detachedHead=false"
-$GIT_CONFIG_NO_DETACHED_ADVICE clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "$ASDF_VERSION"
+if ! $GIT_CONFIG_NO_DETACHED_ADVICE clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "$ASDF_VERSION"; then
+    log_message "Failed to install asdf. Please check your internet connection." "$RED"
+    exit 1
+fi
+
 . "$HOME/.asdf/asdf.sh"
 log_message "asdf installation completed!" "$GREEN"
 

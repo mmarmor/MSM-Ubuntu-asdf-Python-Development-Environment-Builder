@@ -16,12 +16,18 @@ REPO_URL="https://raw.githubusercontent.com/mmarmor/pyqwer/main"
 SETUP_SCRIPT="pyqwer.sh"
 INSTALLER_SCRIPT="latest-pythons.py"
 
-# Download the scripts
-echo "Downloading $SETUP_SCRIPT..."
-curl -sLO "$REPO_URL/$SETUP_SCRIPT"
+# Download the scripts with error handling
+log_message "Downloading $SETUP_SCRIPT..." "$GREEN"
+if ! curl -sLO "$REPO_URL/$SETUP_SCRIPT"; then
+    log_message "Failed to download $SETUP_SCRIPT. Please check your internet connection." "$RED"
+    exit 1
+fi
 
-echo "Downloading $INSTALLER_SCRIPT..."
-curl -sLO "$REPO_URL/$INSTALLER_SCRIPT"
+log_message "Downloading $INSTALLER_SCRIPT..." "$GREEN"
+if ! curl -sLO "$REPO_URL/$INSTALLER_SCRIPT"; then
+    log_message "Failed to download $INSTALLER_SCRIPT. Please check your internet connection." "$RED"
+    exit 1
+fi
 
 # Make scripts executable
 chmod +x "$SETUP_SCRIPT" "$INSTALLER_SCRIPT"
