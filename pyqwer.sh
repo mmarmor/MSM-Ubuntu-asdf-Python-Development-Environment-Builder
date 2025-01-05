@@ -63,13 +63,24 @@ ensure_pipx_build_deps() {
     # Get pipx's Python path
     PIPX_PYTHON=$(pipx environment | grep 'PIPX_DEFAULT_PYTHON' | cut -d'=' -f2)
     
-    # Install specific versions only for pipx's Python
-    $PIPX_PYTHON -m pip install --upgrade "setuptools<66.0.0" "pip<23.1" wheel distutils
+    # First ensure pip is up-to-date
+    $PIPX_PYTHON -m pip install --upgrade pip
+    
+    # Install specific legacy versions that include distutils
+    $PIPX_PYTHON -m pip install --upgrade "setuptools<66.0.0" "pip<23.1" wheel
+    
+    # Install distutils package explicitly
+    $PIPX_PYTHON -m pip install distutils
     
     # Verify installation
     if ! $PIPX_PYTHON -c "import distutils" &>/dev/null; then
-        log_message "Failed to setup pipx build environment!" "$RED"
-        exit 1
+        log_message "Failed to setup pipx build environment! Trying alternative approach..." "$YELLOW"
+        # Try installing distutils via system package
+        sudo apt install -y python3-distutils
+        if ! $PIPX_PYTHON -c "import distutils" &>/dev/null; then
+            log_message "Failed to setup pipx build environment!" "$RED"
+            exit 1
+        fi
     fi
     log_message "pipx build dependencies verified." "$GREEN"
 }
