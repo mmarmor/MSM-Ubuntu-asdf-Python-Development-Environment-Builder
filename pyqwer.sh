@@ -210,13 +210,20 @@ ensure_python_build_deps() {
     # Determine Python binary path with fallback
     PYTHON_BIN_PATH="python3"
     if command_exists asdf; then
-        ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
-        if [ -n "$ASDF_PYTHON_VERSION" ]; then
-            ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
-            if [ -f "$ASDF_PYTHON_PATH" ]; then
-                PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
-            else
-                log_message "Warning: asdf Python version found but binary not found at $ASDF_PYTHON_PATH" "$YELLOW"
+        # Get the actual installed version path
+        ASDF_PYTHON_PATH=$(asdf which python 2>/dev/null)
+        if [ -n "$ASDF_PYTHON_PATH" ] && [ -f "$ASDF_PYTHON_PATH" ]; then
+            PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
+        else
+            # Fallback to checking current version
+            ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
+            if [ -n "$ASDF_PYTHON_VERSION" ]; then
+                ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
+                if [ -f "$ASDF_PYTHON_PATH" ]; then
+                    PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
+                else
+                    log_message "Warning: asdf Python version found but binary not found at $ASDF_PYTHON_PATH" "$YELLOW"
+                fi
             fi
         fi
     fi
