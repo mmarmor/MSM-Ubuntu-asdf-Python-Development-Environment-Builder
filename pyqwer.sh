@@ -139,8 +139,17 @@ fi
 
 ## Upgrading pip and Installing pipx
 log_message "Upgrading pip and installing pipx..." "$GREEN"
-PYTHON_BIN_PATH="$HOME/.asdf/installs/python/$(asdf current python | cut -d ' ' -f 1)/bin/python"
-[ ! -f "$PYTHON_BIN_PATH" ] && PYTHON_BIN_PATH="python3"
+# Determine Python binary path
+PYTHON_BIN_PATH="python3"
+if command -v asdf > /dev/null; then
+    ASDF_PYTHON_VERSION=$(asdf current python 2>/dev/null | awk '{print $1}')
+    if [ -n "$ASDF_PYTHON_VERSION" ]; then
+        ASDF_PYTHON_PATH="$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION/bin/python"
+        if [ -f "$ASDF_PYTHON_PATH" ]; then
+            PYTHON_BIN_PATH="$ASDF_PYTHON_PATH"
+        fi
+    fi
+fi
 
 $PYTHON_BIN_PATH -m pip install --upgrade pip
 $PYTHON_BIN_PATH -m pip install --user pipx
