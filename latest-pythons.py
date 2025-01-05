@@ -129,6 +129,23 @@ def get_latest_asdf_versions(output, count=3):
 
     return sorted(selected_versions, reverse=True)
 
+def get_installed_versions():
+    """
+    Get currently installed Python versions from asdf.
+    
+    Returns:
+        set: Set of installed Python version strings
+    """
+    try:
+        output = subprocess.check_output(['asdf', 'list', 'python']).decode('utf-8')
+        installed_versions = set()
+        for line in output.split('\n'):
+            if line.strip() and line.strip()[0].isdigit():
+                installed_versions.add(line.strip())
+        return installed_versions
+    except subprocess.CalledProcessError:
+        return set()
+
 def install_python_versions(count=3):
     """
     Installs the latest 'count' minor Python versions using asdf and sets them as global versions.
@@ -153,15 +170,33 @@ def install_python_versions(count=3):
             print("No valid Python 3.x versions found in asdf.")
             return
 
-        print(f"\nThe following Python versions will be installed: {', '.join(versions)}")
-        print(f"Python {versions[0]} will be set as the global default.")
+        # Get currently installed versions
+        installed_versions = get_installed_versions()
+        
+        # Filter out already installed versions
+        versions_to_install = [v for v in versions if v not in installed_versions]
+        
+        if not versions_to_install:
+            print("\nAll requested Python versions are already installed:")
+            for v in versions:
+                print(f"- Python {v} (already installed)")
+            return
+
+        print("\nThe following Python versions will be installed:")
+        for v in versions:
+            if v in installed_versions:
+                print(f"- Python {v} (already installed)")
+            else:
+                print(f"- Python {v} (new installation)")
+        
+        print(f"\nPython {versions[0]} will be set as the global default.")
         response = input("Do you want to continue? [Y/n]: ").strip().lower()
         
         if response and response != 'y':
             print("Installation cancelled.")
             return
 
-        for version in versions:
+        for version in versions_to_install:
             print(f"\nInstalling Python {version}...")
             try:
                 subprocess.run(['asdf', 'install', 'python', version], check=True)
