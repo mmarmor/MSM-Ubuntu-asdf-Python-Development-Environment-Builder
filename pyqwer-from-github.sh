@@ -9,6 +9,19 @@
 # To use this script:
 # curl -sL https://raw.githubusercontent.com/mmarmor/pyqwer/main/pyqwer-from-github.sh | bash
 
+# Function to log messages with a newline after each message
+log_message() {
+    local message=$1
+    local color=$2
+    echo -e "\n${color}${message}\e[0m\n"
+}
+
+# Color codes
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+
 # Define the GitHub repository and branch
 REPO_URL="https://raw.githubusercontent.com/mmarmor/pyqwer/main"
 
