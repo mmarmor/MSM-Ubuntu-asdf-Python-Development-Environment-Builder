@@ -4,7 +4,9 @@
 
 ----
 
-This project provides a set of scripts for setting up a comprehensive command-line-driven Python development environment on Ubuntu, including tools I frequently use, like `asdf`, `python-launcher`, `pipx`, `build`, `tox`, `pre-commit`, and `cookiecutter`. For AI assisted coding, it also installs [Aider](https://aider.chat/) and [Playwright](https://playwright.dev/python/docs/browsers#install-system-dependencies) with the chromium dependency.
+This project provides a set of scripts for setting up a comprehensive command-line-driven Python development environment on Ubuntu, including tools I frequently use, like `asdf`, `python-launcher`, `pipx`, `build`, `tox`, `pre-commit`, and `cookiecutter`.
+
+<!-- For AI assisted coding, it also installs [Aider](https://aider.chat/) and [Playwright](https://playwright.dev/python/docs/browsers#install-system-dependencies) with the chromium dependency. -->
 
 In addition to updating Ubuntu and installing dependencies and tools, it automatically installs the three latest minor versions of Python using [asdf](https://asdf-vm.com/) (via the [asdf-python](https://github.com/asdf-community/asdf-python) plugin, which uses [pyenv](https://github.com/pyenv/pyenv)) for development and testing.
 
@@ -122,19 +124,40 @@ Add the user to the sudo group:
 usermod -aG sudo marmor
 ```
 
+Or do both of these at the same time (and skip the questions):
+
+```bash
+adduser --gecos "" marmor && usermod -aG sudo marmor
+```
+
 Change the default user to avoid launching into the root shell:
 
-Exit WSL and run this from your Windows command prompt (CMD or PowerShell):
+Edit `/etc/wsl.conf` and add your username to the end of the file:
 
-```PS
-wsl -d Ubuntu-24.04 -u marmor
+```conf
+[user]
+default=marmor
 ```
 
-if that does not seem to work, try this, which worked when the command above did not:
+You can make this edit this way as well:
 
-```PS
-ubuntu2004 config --default-user marmor
+```bash
+sed -i '$a\\n[user]\ndefault=marmor' /etc/wsl.conf
 ```
+
+Once you do that you will need to `exit` the Ubuntu system and shut the WSL instance down with the terminate command:
+
+```bash
+wsl -t Ubuntu-24.04
+```
+
+Wait 8 seconds for WSL to terminate system. Then you can start it again with:
+
+```bash
+wsl -d Ubuntu-24.04
+```
+
+At this point you are ready to run the installation of the `pyqwer` script.
 
 #### Tearing Down Ubuntu in WSL2
 
