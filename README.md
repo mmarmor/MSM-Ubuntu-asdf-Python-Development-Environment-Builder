@@ -151,7 +151,7 @@ Once you do that you will need to `exit` the Ubuntu system and shut the WSL inst
 wsl -t Ubuntu-24.04
 ```
 
-Wait 8 seconds for WSL to terminate system. Then you can start it again with:
+Wait 8 seconds for WSL to terminate the instance. Then you can start it again with:
 
 ```bash
 wsl -d Ubuntu-24.04
