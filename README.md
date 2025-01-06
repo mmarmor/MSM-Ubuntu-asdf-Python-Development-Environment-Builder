@@ -16,10 +16,14 @@ This is definitely a script I made for myself, but if you find this helpful, tha
 
 - **System Update**: Automatically updates and upgrades the system using APT.
 - **Dependencies Installation**: Installs necessary dependencies for asdf, Python, and python-launcher.
-- **Python Version Management**: Installs multiple Python versions using asdf and sets the global Python version.
-- **Python-Launcher**: Installs [python-launcher](https://python-launcher.app/) via `cargo` for easy Python version switching on Linux.
-- **Development Tools**: Installs essential Python development tools using pipx.
-- **asdf Installation**: Installs asdf (version v0.14.1). Check [asdf-vm.com](https://asdf-vm.com/guide/getting-started.html#_2-download-asdf) for the latest branch version and modify the script as needed to use the latest.
+- **Python Version Management**: Automatically installs the three latest stable Python versions using asdf (e.g., 3.13.x, 3.12.x, 3.11.x) and sets the most recent version as global default
+- **Python-Launcher**: Installs [python-launcher](https://python-launcher.app/) via `cargo` for easy Python version switching on Linux
+- **Development Tools**: Installs essential Python development tools using pipx:
+  - `build`: Standardized package building
+  - `tox`: Automated testing across Python versions
+  - `pre-commit`: Git pre-commit hooks
+  - `cookiecutter`: Project template generation
+- **asdf Installation**: Automatically installs the latest stable version of asdf (currently v0.15.0)
 
 ## Scripts
 
@@ -285,29 +289,49 @@ Check that you are connected to the WSL by looking at the bottom-left corner of 
 
 ## Customization
 
-This script installs the three most recent minor versions of Python (for example, 3.13.X, 3.12.X, 3.11.X) and sets the most recent (3.13.X in the example) as the global default. You can customize the number of Python versions to install by modifying the `count` parameter in the `install_python_versions` function call inside `latest-pythons.py`.
+This script automatically installs the three most recent stable Python versions (e.g., 3.13.x, 3.12.x, 3.11.x) and sets the most recent version as the global default. The installation process:
+
+1. Uses asdf for version management
+2. Creates ~/.default-python-packages with essential tools
+3. Sets up proper build dependencies for each version
+4. Handles both system and asdf-managed Python installations
+
+You can customize the number of Python versions to install by modifying the `count` parameter in the `install_python_versions` function call inside `latest-pythons.py`.
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Missing Dependencies**:
-   Ensure all required dependencies are installed. Run the following command to install missing tools:
+   The script should automatically install all required dependencies. If you encounter issues, run:
    ```bash
-   sudo apt install -y curl cargo build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev tree
+   sudo apt install -y curl cargo build-essential libssl-dev zlib1g-dev \
+   libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils \
+   tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev tree
    ```
 
 2. **Failed Installations**:
-   If the script fails, check the logs for error messages. Common issues include:
-   - Missing `asdf`: Ensure asdf is installed and in your PATH
-   - Missing `curl`: Install with `sudo apt install curl`
-   - Missing `cargo`: Install Rust with `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+   If the script fails:
+   - Check the error output for specific messages
+   - Verify internet connectivity
+   - Ensure sufficient disk space (at least 2GB free)
+   - Common issues:
+     - Missing `asdf`: Verify installation in ~/.asdf
+     - Missing `curl`: Install with `sudo apt install curl`
+     - Missing `cargo`: Install Rust with `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
 3. **Python Installation Issues**:
    If Python versions fail to install:
-   - Ensure you have all build dependencies installed
-   - Check your internet connection
-   - Try running the installation manually: `asdf install python <version>`
+   - Verify build dependencies: `sudo apt install python3-dev build-essential`
+   - Check for specific error messages in the asdf output
+   - Try manual installation: `asdf install python <version>`
+   - For Python < 3.12, ensure `python3-distutils` is installed
+
+4. **pipx Installation Issues**:
+   If pipx tools fail to install:
+   - Verify Python installation: `python3 --version`
+   - Ensure pip is up-to-date: `python3 -m pip install --upgrade pip`
+   - Check PATH includes ~/.local/bin
 
 ## License
 
