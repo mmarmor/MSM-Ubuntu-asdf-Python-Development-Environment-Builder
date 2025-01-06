@@ -79,16 +79,6 @@ ensure_pipx_build_deps() {
     log_message "pipx build dependencies verified." "$GREEN"
 }
 
-ensure_python_build_deps() {
-    log_message "Ensuring Python build dependencies..." "$GREEN"
-    # Install system packages
-    sudo apt install -y python3-distutils python3-dev build-essential
-    
-    # Install latest pip packages for regular Python
-    $PYTHON_BIN_PATH -m pip install --upgrade pip setuptools wheel
-    
-    log_message "Python build dependencies verified." "$GREEN"
-}
 
 # Function to check if command exists
 command_exists() {
