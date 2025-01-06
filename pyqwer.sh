@@ -62,7 +62,7 @@ ensure_pipx_build_deps() {
     log_message "Ensuring pipx build dependencies..." "$GREEN"
     
     # Get pipx's Python path and version
-    PIPX_PYTHON=$(pipx environment | grep 'PIPX_DEFAULT_PYTHON' | cut -d'=' -f2)
+    PIPX_PYTHON=$(command -v python3)
     PIPX_PYTHON_VERSION=$($PIPX_PYTHON --version 2>&1 | awk '{print $2}')
     
     log_message "Using pipx Python: $PIPX_PYTHON (version $PIPX_PYTHON_VERSION)" "$BLUE"
